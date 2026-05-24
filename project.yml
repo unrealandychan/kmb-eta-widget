@@ -32,6 +32,22 @@ targets:
     dependencies:
       - target: KMBWidgetExtension
 
+  # ── macOS Menu Bar App ────────────────────────────────
+  KMBMenuBar:
+    type: application
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: KMBMenuBar/Sources
+      # Shared models + API (compiled into both targets)
+      - path: KMBWidget/Sources/Models/Models.swift
+      - path: KMBWidget/Sources/API/KMBAPIClient.swift
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.eddie.kmbwidget.menubar
+        INFOPLIST_FILE: KMBMenuBar/Info.plist
+        MACOSX_DEPLOYMENT_TARGET: "14.0"
+
   # ── Widget Extension ──────────────────────────────────
   KMBWidgetExtension:
     type: app-extension
