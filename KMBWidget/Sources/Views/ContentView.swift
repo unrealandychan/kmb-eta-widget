@@ -1,5 +1,6 @@
 import SwiftUI
 import WidgetKit
+import AppKit
 
 // MARK: - Main App ContentView
 
@@ -38,6 +39,7 @@ struct ContentView: View {
                     if !config.stops.contains(where: { $0.stopID == saved.stopID }) {
                         config.stops.append(saved)
                         config.save()
+                        WidgetCenter.shared.reloadAllTimelines()
                     }
                 }
             }
@@ -90,7 +92,7 @@ struct ContentView: View {
             }
 
             Section {
-                Text("Widget 每 5 分鐘自動更新。在主畫面長按 Widget 可選擇顯示哪個巴士站。")
+                Text("Widget 每 5 分鐘自動更新。在桌面長按 Widget 可選擇顯示哪個巴士站。")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -120,23 +122,42 @@ struct StopSearchView: View {
     @State private var results: [KMBStop] = []
     @State private var isLoading = false
     @State private var error: String?
+    @State private var selectedStop: KMBStop?
     @FocusState private var searchFocused: Bool
 
     var body: some View {
         VStack(spacing: 0) {
-            // Custom search bar — always focusable on macOS
+            // Header
+            HStack {
+                Text("搜尋巴士站")
+                    .font(.headline)
+                Spacer()
+                Button("取消") { dismiss() }
+                    .keyboardShortcut(.escape, modifiers: [])
+            }
+            .padding(.horizontal, 16)
+            .padding(.top, 16)
+            .padding(.bottom, 10)
+
+            Divider()
+
+            // Search bar
             HStack(spacing: 8) {
                 Image(systemName: "magnifyingglass")
                     .foregroundStyle(.secondary)
                 TextField("輸入地區或站名，例如：旺角", text: $query)
                     .textFieldStyle(.plain)
                     .focused($searchFocused)
-                    .onChange(of: query) { _, new in
-                        guard new.count >= 2 else { results = []; return }
-                        Task { await search(new) }
+                    .onSubmit {
+                        if query.count >= 1 {
+                            Task { await search(query) }
+                        }
                     }
                 if !query.isEmpty {
-                    Button { query = ""; results = [] } label: {
+                    Button {
+                        query = ""
+                        results = []
+                    } label: {
                         Image(systemName: "xmark.circle.fill")
                             .foregroundStyle(.secondary)
                     }
@@ -144,61 +165,124 @@ struct StopSearchView: View {
                 }
             }
             .padding(10)
-            .background(.quaternary, in: RoundedRectangle(cornerRadius: 8))
-            .padding([.horizontal, .top], 16)
+            .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 8))
+            .overlay(RoundedRectangle(cornerRadius: 8).stroke(searchFocused ? Color.accentColor : Color.clear, lineWidth: 2))
+            .padding(.horizontal, 16)
+            .padding(.vertical, 10)
+
+            // Search button
+            HStack {
+                Button {
+                    Task { await search(query) }
+                } label: {
+                    Label("搜尋", systemImage: "magnifyingglass")
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(query.isEmpty)
+                Spacer()
+                if isLoading {
+                    ProgressView().scaleEffect(0.8)
+                }
+            }
+            .padding(.horizontal, 16)
             .padding(.bottom, 8)
 
             Divider()
 
-            List {
-                if isLoading {
-                    HStack {
-                        ProgressView()
-                        Text("搜尋中…").foregroundStyle(.secondary)
-                    }
-                } else if let error {
+            // Results
+            if let error {
+                VStack {
+                    Spacer()
                     Text("❌ \(error)").foregroundStyle(.red)
-                } else if results.isEmpty && query.count >= 2 {
-                    Text("找不到相關巴士站").foregroundStyle(.secondary)
-                } else {
-                    ForEach(results) { stop in
-                        Button {
-                            onSelect(stop)
-                            dismiss()
-                        } label: {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(stop.nameTc).font(.headline).foregroundStyle(.primary)
-                                Text(stop.nameEn).font(.caption).foregroundStyle(.secondary)
-                                Text(stop.stopID).font(.caption2).foregroundStyle(.tertiary)
-                            }
-                            .padding(.vertical, 2)
+                    Spacer()
+                }
+            } else if results.isEmpty && !isLoading {
+                VStack {
+                    Spacer()
+                    if query.count >= 1 {
+                        Text("找不到「\(query)」相關巴士站")
+                            .foregroundStyle(.secondary)
+                    } else {
+                        Text("輸入站名搜尋")
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                }
+            } else {
+                ScrollView {
+                    LazyVStack(alignment: .leading, spacing: 0) {
+                        ForEach(results) { stop in
+                            stopRow(stop)
                         }
-                        .buttonStyle(.plain)
                     }
                 }
             }
-            .listStyle(.plain)
-
-            Divider()
-            HStack {
-                Spacer()
-                Button("取消") { dismiss() }
-                    .keyboardShortcut(.escape, modifiers: [])
-                    .padding(.trailing, 16)
-            }
-            .padding(.vertical, 10)
         }
-        .frame(minWidth: 420, minHeight: 480)
+        .frame(minWidth: 440, minHeight: 500)
+        .background(Color(nsColor: .windowBackgroundColor))
         .onAppear {
-            // Delay slightly to ensure sheet is fully presented before focusing
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+            // Force window to front and focus the text field
+            NSApp.activate(ignoringOtherApps: true)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 searchFocused = true
+            }
+        }
+        .onChange(of: query) { _, new in
+            // Auto search after 2+ chars with debounce
+            guard new.count >= 2 else {
+                if new.isEmpty { results = [] }
+                return
+            }
+            Task {
+                try? await Task.sleep(for: .milliseconds(400))
+                if query == new { await search(new) }
             }
         }
     }
 
+    func stopRow(_ stop: KMBStop) -> some View {
+        Button {
+            onSelect(stop)
+            dismiss()
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: "mappin.circle.fill")
+                    .foregroundStyle(.blue)
+                    .font(.title3)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(stop.nameTc)
+                        .font(.headline)
+                        .foregroundStyle(.primary)
+                    Text(stop.nameEn)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text("站號：\(stop.stopID)")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                }
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 10)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .background(selectedStop?.stopID == stop.stopID ? Color.accentColor.opacity(0.1) : Color.clear)
+        .onHover { hovering in
+            if hovering { selectedStop = stop } else { selectedStop = nil }
+        }
+
+        // Divider at bottom
+        Divider().padding(.leading, 52)
+    }
+
     func search(_ kw: String) async {
-        isLoading = true; error = nil
+        guard !kw.isEmpty else { return }
+        isLoading = true
+        error = nil
         do {
             results = try await KMBAPIClient.searchStops(keyword: kw)
         } catch {
