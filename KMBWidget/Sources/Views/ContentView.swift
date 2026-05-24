@@ -1,11 +1,12 @@
 import SwiftUI
 import WidgetKit
 
-// MARK: - Main App ContentView (Stop Configuration)
+// MARK: - Main App ContentView
 
 struct ContentView: View {
     @State private var config = WidgetConfig.load()
     @State private var showSearch = false
+    @State private var editMode = false
 
     var body: some View {
         NavigationStack {
@@ -21,6 +22,13 @@ struct ContentView: View {
                 ToolbarItem(placement: .primaryAction) {
                     Button { showSearch = true } label: {
                         Label("新增巴士站", systemImage: "plus")
+                    }
+                }
+                if !config.stops.isEmpty {
+                    ToolbarItem(placement: .automatic) {
+                        Button(editMode ? "完成" : "編輯") {
+                            editMode.toggle()
+                        }
                     }
                 }
             }
@@ -56,15 +64,24 @@ struct ContentView: View {
 
     var stopList: some View {
         List {
-            ForEach($config.stops) { $stop in
-                NavigationLink(destination: StopDetailView(stop: stop)) {
-                    stopRow(stop)
+            ForEach(config.stops) { stop in
+                HStack {
+                    NavigationLink(destination: StopDetailView(stop: stop)) {
+                        stopRow(stop)
+                    }
+                    if editMode {
+                        Spacer()
+                        Button(role: .destructive) {
+                            config.stops.removeAll { $0.stopID == stop.stopID }
+                            config.save()
+                            WidgetCenter.shared.reloadAllTimelines()
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundStyle(.red)
+                        }
+                        .buttonStyle(.plain)
+                    }
                 }
-            }
-            .onDelete { idx in
-                config.stops.remove(atOffsets: idx)
-                config.save()
-                WidgetCenter.shared.reloadAllTimelines()
             }
             .onMove { from, to in
                 config.stops.move(fromOffsets: from, toOffset: to)
@@ -78,8 +95,6 @@ struct ContentView: View {
                     .foregroundStyle(.secondary)
             }
         }
-        .listStyle(.insetGrouped)
-        .toolbar { EditButton() }
     }
 
     func stopRow(_ stop: SavedStop) -> some View {
@@ -88,11 +103,8 @@ struct ContentView: View {
                 .foregroundStyle(.blue)
                 .font(.title2)
             VStack(alignment: .leading, spacing: 2) {
-                Text(stop.label)
-                    .font(.headline)
-                Text(stop.stopID)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                Text(stop.label).font(.headline)
+                Text(stop.stopID).font(.caption).foregroundStyle(.secondary)
             }
         }
         .padding(.vertical, 4)
@@ -128,15 +140,15 @@ struct StopSearchView: View {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(stop.nameTc).font(.headline).foregroundStyle(.primary)
                                 Text(stop.nameEn).font(.caption).foregroundStyle(.secondary)
-                                Text(stop.stopID).font(.caption2).foregroundStyle(Color(.systemGray3))
+                                Text(stop.stopID).font(.caption2).foregroundStyle(.tertiary)
                             }
                             .padding(.vertical, 2)
                         }
+                        .buttonStyle(.plain)
                     }
                 }
             }
             .navigationTitle("搜尋巴士站")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("取消") { dismiss() }
@@ -148,6 +160,7 @@ struct StopSearchView: View {
                 Task { await search(new) }
             }
         }
+        .frame(minWidth: 400, minHeight: 500)
     }
 
     func search(_ kw: String) async {
@@ -161,7 +174,7 @@ struct StopSearchView: View {
     }
 }
 
-// MARK: - Stop Detail View (preview ETA in-app)
+// MARK: - Stop Detail View
 
 struct StopDetailView: View {
     let stop: SavedStop
@@ -188,7 +201,6 @@ struct StopDetailView: View {
             }
         }
         .navigationTitle(stop.label)
-        .navigationBarTitleDisplayMode(.inline)
         .refreshable { await loadData() }
         .task { await loadData() }
     }
@@ -200,6 +212,8 @@ struct StopDetailView: View {
         isLoading = false
     }
 }
+
+// MARK: - ETA Row
 
 struct ETARow: View {
     let route: RouteEta
