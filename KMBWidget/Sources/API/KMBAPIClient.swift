@@ -11,11 +11,20 @@ enum KMBAPIError: Error {
 struct KMBAPIClient {
     static let base = "https://data.etabus.gov.hk/v1/transport/kmb"
 
-    // MARK: Search stops by keyword
-    static func searchStops(keyword: String) async throws -> [KMBStop] {
+    // MARK: All stops (cached in memory for distance calculations)
+    private static var _cachedStops: [KMBStop]?
+    static func allStops() async throws -> [KMBStop] {
+        if let cached = _cachedStops { return cached }
         struct Response: Decodable { let data: [KMBStop] }
         let url = URL(string: "\(base)/stop/")!
-        let all = try await get(url, as: Response.self).data
+        let stops = try await get(url, as: Response.self).data
+        _cachedStops = stops
+        return stops
+    }
+
+    // MARK: Search stops by keyword
+    static func searchStops(keyword: String) async throws -> [KMBStop] {
+        let all = try await allStops()
         let kw = keyword.lowercased()
         return all.filter {
             $0.nameTc.lowercased().contains(kw) || $0.nameEn.lowercased().contains(kw)

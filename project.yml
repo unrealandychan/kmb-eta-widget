@@ -21,9 +21,6 @@ targets:
     deploymentTarget: "17.0"
     sources:
       - path: KMBWidget/Sources
-        excludes: []
-      - path: KMBWidget/Sources/Models/Models.swift
-      - path: KMBWidget/Sources/API/KMBAPIClient.swift
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.eddie.kmbwidget
