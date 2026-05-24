@@ -25,6 +25,8 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.eddie.kmbwidget
         INFOPLIST_FILE: KMBWidget/Info.plist
         MACOSX_DEPLOYMENT_TARGET: "14.0"
+        CODE_SIGN_ENTITLEMENTS: KMBWidget/KMBWidget.entitlements
+        ENABLE_APP_SANDBOX: YES
     entitlements:
       path: KMBWidget/KMBWidget.entitlements
     dependencies:
@@ -43,6 +45,8 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.eddie.kmbwidget.widget
         INFOPLIST_FILE: KMBWidgetExtension/Info.plist
+        CODE_SIGN_ENTITLEMENTS: KMBWidgetExtension/KMBWidgetExtension.entitlements
+        ENABLE_APP_SANDBOX: YES
     entitlements:
       path: KMBWidgetExtension/KMBWidgetExtension.entitlements
 
