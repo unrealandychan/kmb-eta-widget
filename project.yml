@@ -31,6 +31,7 @@ targets:
       path: KMBWidget/KMBWidget.entitlements
     dependencies:
       - target: KMBWidgetExtension
+        embed: true
 
   # ── WidgetKit Extension (macOS 桌面 Widget) ─────────────
   KMBWidgetExtension:
