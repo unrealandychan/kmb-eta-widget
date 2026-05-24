@@ -1,58 +1,53 @@
 #!/bin/bash
-# ╔══════════════════════════════════════════════════════╗
-# ║  KMBWidget — Setup Script                            ║
-# ║  執行一次即生成 Xcode project，然後直接開啟            ║
-# ╚══════════════════════════════════════════════════════╝
-
 set -e
 
-echo "🚌 KMB Widget — Xcode Project Setup"
-echo "======================================"
+echo "🚌 KMBWidget — macOS Setup"
+echo "================================"
 
-# 1. Check Homebrew
-if ! command -v brew &>/dev/null; then
-    echo "❌ 未安裝 Homebrew，請先到 https://brew.sh 安裝"
-    exit 1
+# ── 1. Check macOS version ─────────────────────────────
+SW=$(sw_vers -productVersion 2>/dev/null || echo "0")
+MAJOR=$(echo "$SW" | cut -d. -f1)
+if [ "$MAJOR" -lt 14 ]; then
+  echo "❌ 需要 macOS 14 (Sonoma) 或以上，你的版本：$SW"
+  exit 1
 fi
+echo "✅ macOS $SW"
 
-# 2. Install XcodeGen
+# ── 2. Check Xcode ────────────────────────────────────
+if ! xcode-select -p &>/dev/null; then
+  echo "❌ 未安裝 Xcode Command Line Tools"
+  echo "   請先執行：xcode-select --install"
+  exit 1
+fi
+XCODE_VER=$(xcodebuild -version 2>/dev/null | head -1)
+echo "✅ $XCODE_VER"
+
+# ── 3. Install XcodeGen ──────────────────────────────
 if ! command -v xcodegen &>/dev/null; then
-    echo "📦 安裝 XcodeGen..."
+  echo "📦 安裝 XcodeGen..."
+  if command -v brew &>/dev/null; then
     brew install xcodegen
-else
-    echo "✅ XcodeGen 已安裝"
+  else
+    echo "❌ 未安裝 Homebrew，請先安裝：https://brew.sh"
+    exit 1
+  fi
 fi
+echo "✅ XcodeGen $(xcodegen --version)"
 
-# 3. Generate Xcode project
+# ── 4. Generate Xcode project ────────────────────────
 echo ""
 echo "⚙️  生成 Xcode project..."
 xcodegen generate
 
 echo ""
-echo "✅ 完成！Xcode project 已生成。"
+echo "✅ 完成！KMBWidget.xcodeproj 已生成"
 echo ""
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "📋 接下來步驟："
+echo "下一步："
+echo "  1. open KMBWidget.xcodeproj"
+echo "  2. Xcode → Signing & Capabilities → 填入你的 Apple Developer Team"
+echo "  3. 選 Scheme:"
+echo "     - KMBWidget   → 主 App（搜尋站 + 附近站 + 提醒管理）"
+echo "     - KMBMenuBar  → Menu Bar App（倒數到站）"
+echo "  4. ⌘R 執行"
 echo ""
-echo "  1. 開啟 Xcode："
-echo "     open KMBWidget.xcodeproj"
-echo ""
-echo "  2. 簽名設定（如需真機測試）："
-echo "     Xcode → Signing & Capabilities → 填入你的 Team"
-echo ""
-echo "  3. 確認 App Group 設定："
-echo "     兩個 target 都要加 App Groups: group.com.eddie.kmbwidget"
-echo ""
-echo "  4. 選 Simulator (iPhone/iPad) → Build & Run (⌘R)"
-echo ""
-echo "  5. App 內搜尋並新增你樓下嘅巴士站"
-echo ""
-echo "  6. 長按主畫面 → 加 Widget → 選「九巴到站時間」"
-echo "     Small / Medium / Large 三種尺寸任揀！"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-
-# Offer to open Xcode directly
-read -p "🚀 立即開啟 Xcode？(y/N) " yn
-if [[ "$yn" =~ ^[Yy] ]]; then
-    open KMBWidget.xcodeproj
-fi
+echo "建議先跑 KMBMenuBar，最即刻見到效果！"
