@@ -88,3 +88,28 @@ struct WidgetConfig: Codable {
     var stops: [SavedStop]
     static let `default` = WidgetConfig(stops: [])
 }
+
+// MARK: - Shared Constants
+
+let kAppGroup = "group.com.eddie.kmbwidget"
+
+// MARK: - WidgetConfig Persistence (App Group UserDefaults)
+
+extension WidgetConfig {
+    static func load() -> WidgetConfig {
+        guard
+            let defaults = UserDefaults(suiteName: kAppGroup),
+            let data = defaults.data(forKey: "widgetConfig"),
+            let config = try? JSONDecoder().decode(WidgetConfig.self, from: data)
+        else { return .default }
+        return config
+    }
+
+    func save() {
+        guard
+            let defaults = UserDefaults(suiteName: kAppGroup),
+            let data = try? JSONEncoder().encode(self)
+        else { return }
+        defaults.set(data, forKey: "widgetConfig")
+    }
+}
