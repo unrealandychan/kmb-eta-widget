@@ -71,30 +71,4 @@ struct KMBAPIClient {
     }
 }
 
-// MARK: - App Group key
-let kAppGroup       = "group.com.eddie.kmbwidget"
-let kConfigKey      = "widgetConfig"
 
-extension WidgetConfig {
-    static func load() -> WidgetConfig {
-        guard
-            let suite  = UserDefaults(suiteName: kAppGroup),
-            let data   = suite.data(forKey: kConfigKey),
-            let config = try? JSONDecoder().decode(WidgetConfig.self, from: data)
-        else { return .default }
-        return config
-    }
-
-    func save() {
-        guard
-            let suite = UserDefaults(suiteName: kAppGroup),
-            let data  = try? JSONEncoder().encode(self)
-        else { return }
-        suite.set(data, forKey: kConfigKey)
-        // Reload widget timelines
-        #if canImport(WidgetKit)
-        import WidgetKit
-        WidgetCenter.shared.reloadAllTimelines()
-        #endif
-    }
-}
