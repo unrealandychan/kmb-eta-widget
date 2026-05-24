@@ -2,17 +2,48 @@ import WidgetKit
 import SwiftUI
 import AppIntents
 
+// MARK: - SavedStop AppEntity (for Widget picker dropdown)
+
+struct SavedStopEntity: AppEntity {
+    static var typeDisplayRepresentation: TypeDisplayRepresentation = "巴士站"
+    static var defaultQuery = SavedStopQuery()
+
+    var id: String          // stopID
+    var displayName: String // label / nameTc
+
+    var displayRepresentation: DisplayRepresentation {
+        DisplayRepresentation(title: "\(displayName)", subtitle: "\(id)")
+    }
+}
+
+struct SavedStopQuery: EntityQuery {
+    func entities(for identifiers: [String]) async throws -> [SavedStopEntity] {
+        let config = WidgetConfig.load()
+        return config.stops
+            .filter { identifiers.contains($0.stopID) }
+            .map { SavedStopEntity(id: $0.stopID, displayName: $0.label) }
+    }
+
+    func suggestedEntities() async throws -> [SavedStopEntity] {
+        let config = WidgetConfig.load()
+        return config.stops.map { SavedStopEntity(id: $0.stopID, displayName: $0.label) }
+    }
+
+    func defaultResult() async -> SavedStopEntity? {
+        let config = WidgetConfig.load()
+        guard let first = config.stops.first else { return nil }
+        return SavedStopEntity(id: first.stopID, displayName: first.label)
+    }
+}
+
 // MARK: - Widget Configuration Intent (lets user pick a stop per widget)
 
 struct SelectStopIntent: WidgetConfigurationIntent {
     static var title: LocalizedStringResource = "選擇巴士站"
     static var description = IntentDescription("選擇要顯示的九巴站")
 
-    @Parameter(title: "巴士站", default: nil)
-    var stopID: String?
-
-    @Parameter(title: "顯示名稱", default: "巴士站")
-    var label: String?
+    @Parameter(title: "巴士站")
+    var stop: SavedStopEntity?
 }
 
 // MARK: - Timeline Entry
@@ -57,12 +88,12 @@ struct KMBProvider: AppIntentTimelineProvider {
     }
 
     private func fetchEntry(configuration: SelectStopIntent) async -> KMBEntry {
-        // Resolve which stop to show
+        // Resolve which stop to show — from AppEntity picker or fallback to first saved
         let config = WidgetConfig.load()
         let stop: SavedStop?
-        if let sid = configuration.stopID, !sid.isEmpty {
-            stop = config.stops.first(where: { $0.stopID == sid })
-               ?? SavedStop(stopID: sid, label: configuration.label ?? "巴士站", nameTc: configuration.label ?? "巴士站")
+        if let entity = configuration.stop {
+            stop = config.stops.first(where: { $0.stopID == entity.id })
+               ?? SavedStop(stopID: entity.id, label: entity.displayName, nameTc: entity.displayName)
         } else {
             stop = config.stops.first
         }
