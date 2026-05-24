@@ -1,28 +1,15 @@
 import SwiftUI
-import BackgroundTasks
 
 @main
 struct KMBWidgetApp: App {
-
-    init() {
-        BackgroundTaskManager.register()
-    }
-
     var body: some Scene {
         WindowGroup {
             MainTabView()
-                .onChange(of: scenePhase) { _, phase in
-                    if phase == .background {
-                        BackgroundTaskManager.schedule()
-                    }
-                }
         }
     }
-
-    @Environment(\.scenePhase) private var scenePhase
 }
 
-// MARK: - Main Tab View
+// MARK: - Main Tab View (macOS sidebar style)
 struct MainTabView: View {
     var body: some View {
         TabView {
@@ -48,9 +35,9 @@ struct RemindersListView: View {
                 Section {
                     Label("通知權限被關閉，提醒無法發送", systemImage: "bell.slash.fill")
                         .foregroundStyle(.orange)
-                    Button("開啟設定") {
-                        if let url = URL(string: UIApplication.openSettingsURLString) {
-                            UIApplication.shared.open(url)
+                    Button("開啟系統設定") {
+                        if let url = URL(string: "x-apple.systempreferences:com.apple.preference.notifications") {
+                            NSWorkspace.shared.open(url)
                         }
                     }
                 }

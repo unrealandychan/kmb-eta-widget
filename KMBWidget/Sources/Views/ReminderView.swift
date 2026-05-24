@@ -59,9 +59,9 @@ struct StopDetailWithRemindersView: View {
                     Label("請在設定中開啟通知權限", systemImage: "bell.slash.fill")
                         .foregroundStyle(.orange)
                     Button("開啟設定") {
-                        if let url = URL(string: UIApplication.openSettingsURLString) {
-                            UIApplication.shared.open(url)
-                        }
+                if let url = URL(string: "x-apple.systempreferences:com.apple.preference.notifications") {
+                    NSWorkspace.shared.open(url)
+                }
                     }
                 }
             }

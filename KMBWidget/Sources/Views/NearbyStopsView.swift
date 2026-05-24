@@ -72,8 +72,8 @@ struct NearbyStopsView: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
             Button("開啟設定") {
-                if let url = URL(string: UIApplication.openSettingsURLString) {
-                    UIApplication.shared.open(url)
+                if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_LocationServices") {
+                    NSWorkspace.shared.open(url)
                 }
             }
             .buttonStyle(.bordered)
