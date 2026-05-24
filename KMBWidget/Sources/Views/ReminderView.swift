@@ -82,34 +82,6 @@ struct StopDetailWithRemindersView: View {
     }
 }
 
-// MARK: - ETA Row
-
-struct ETARow: View {
-    let route: RouteEta
-    var body: some View {
-        HStack {
-            Text(route.route)
-                .font(.system(.headline, design: .monospaced))
-                .frame(width: 50, alignment: .leading)
-            Text(route.dest)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .lineLimit(1)
-            Spacer()
-            Text(route.etaText)
-                .font(.subheadline.bold())
-                .foregroundStyle(etaColor(route.nextMins))
-        }
-    }
-
-    func etaColor(_ mins: Int?) -> Color {
-        guard let m = mins else { return .secondary }
-        if m <= 2 { return .red }
-        if m <= 5 { return .orange }
-        return .green
-    }
-}
-
 // MARK: - Reminder Row
 
 struct ReminderRow: View {
