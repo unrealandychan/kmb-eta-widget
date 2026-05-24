@@ -120,9 +120,36 @@ struct StopSearchView: View {
     @State private var results: [KMBStop] = []
     @State private var isLoading = false
     @State private var error: String?
+    @FocusState private var searchFocused: Bool
 
     var body: some View {
-        NavigationStack {
+        VStack(spacing: 0) {
+            // Custom search bar — always focusable on macOS
+            HStack(spacing: 8) {
+                Image(systemName: "magnifyingglass")
+                    .foregroundStyle(.secondary)
+                TextField("輸入地區或站名，例如：旺角", text: $query)
+                    .textFieldStyle(.plain)
+                    .focused($searchFocused)
+                    .onChange(of: query) { _, new in
+                        guard new.count >= 2 else { results = []; return }
+                        Task { await search(new) }
+                    }
+                if !query.isEmpty {
+                    Button { query = ""; results = [] } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundStyle(.secondary)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(10)
+            .background(.quaternary, in: RoundedRectangle(cornerRadius: 8))
+            .padding([.horizontal, .top], 16)
+            .padding(.bottom, 8)
+
+            Divider()
+
             List {
                 if isLoading {
                     HStack {
@@ -131,6 +158,8 @@ struct StopSearchView: View {
                     }
                 } else if let error {
                     Text("❌ \(error)").foregroundStyle(.red)
+                } else if results.isEmpty && query.count >= 2 {
+                    Text("找不到相關巴士站").foregroundStyle(.secondary)
                 } else {
                     ForEach(results) { stop in
                         Button {
@@ -148,19 +177,24 @@ struct StopSearchView: View {
                     }
                 }
             }
-            .navigationTitle("搜尋巴士站")
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("取消") { dismiss() }
-                }
+            .listStyle(.plain)
+
+            Divider()
+            HStack {
+                Spacer()
+                Button("取消") { dismiss() }
+                    .keyboardShortcut(.escape, modifiers: [])
+                    .padding(.trailing, 16)
             }
-            .searchable(text: $query, prompt: "輸入地區名稱，例如：旺角")
-            .onChange(of: query) { _, new in
-                guard new.count >= 2 else { results = []; return }
-                Task { await search(new) }
+            .padding(.vertical, 10)
+        }
+        .frame(minWidth: 420, minHeight: 480)
+        .onAppear {
+            // Delay slightly to ensure sheet is fully presented before focusing
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                searchFocused = true
             }
         }
-        .frame(minWidth: 400, minHeight: 500)
     }
 
     func search(_ kw: String) async {
