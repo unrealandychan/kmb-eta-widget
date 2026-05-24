@@ -1,0 +1,90 @@
+import Foundation
+
+// MARK: - Shared Models (used by both App & Widget)
+
+struct KMBStop: Codable, Identifiable, Hashable {
+    var id: String { stopID }
+    let stopID: String
+    let nameTc: String
+    let nameEn: String
+    let lat: String
+    let long: String
+
+    enum CodingKeys: String, CodingKey {
+        case stopID = "stop"
+        case nameTc = "name_tc"
+        case nameEn = "name_en"
+        case lat, long
+    }
+}
+
+struct KMBEtaEntry: Codable, Identifiable {
+    var id: String { "\(route)-\(seq)-\(eta ?? "nil")" }
+    let route: String
+    let dir: String
+    let serviceType: String
+    let seq: Int
+    let destTc: String?
+    let destEn: String?
+    let eta: String?          // ISO-8601 timestamp
+    let etaSeq: Int
+    let rmkTc: String?
+
+    enum CodingKeys: String, CodingKey {
+        case route, dir, seq, eta
+        case serviceType = "service_type"
+        case destTc = "dest_tc"
+        case destEn = "dest_en"
+        case etaSeq  = "eta_seq"
+        case rmkTc   = "rmk_tc"
+    }
+
+    var minutesUntil: Int? {
+        guard let eta else { return nil }
+        let fmt = ISO8601DateFormatter()
+        fmt.formatOptions = [.withInternetDateTime]
+        guard let date = fmt.date(from: eta) else { return nil }
+        let mins = Int(date.timeIntervalSinceNow / 60)
+        return mins
+    }
+
+    var destDisplay: String {
+        destTc ?? destEn ?? "—"
+    }
+}
+
+// Per-route grouping for display
+struct RouteEta: Identifiable {
+    var id: String { route + dest }
+    let route: String
+    let dest: String
+    let etas: [Int?]   // up to 3 upcoming, nil = no data
+
+    var nextMins: Int? { etas.compactMap { $0 }.first }
+
+    var urgencyColor: String {
+        guard let m = nextMins else { return "etaGray" }
+        if m <= 2  { return "etaRed"    }
+        if m <= 5  { return "etaOrange" }
+        return "etaGreen"
+    }
+
+    var etaText: String {
+        guard let m = nextMins else { return "—" }
+        if m <= 0 { return "即將到達" }
+        return "\(m) 分鐘"
+    }
+}
+
+// Saved configuration (stored in App Group UserDefaults)
+struct SavedStop: Codable, Identifiable, Hashable {
+    var id: String { stopID }
+    let stopID: String
+    let label: String      // user custom name
+    let nameTc: String
+}
+
+struct WidgetConfig: Codable {
+    var stops: [SavedStop]
+    static let `default` = WidgetConfig(stops: [])
+}
