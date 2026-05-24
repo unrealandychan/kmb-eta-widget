@@ -9,7 +9,7 @@ struct KMBWidgetApp: App {
     }
 }
 
-// MARK: - Main Tab View (macOS sidebar style)
+// MARK: - Main Tab View
 struct MainTabView: View {
     var body: some View {
         TabView {
@@ -28,6 +28,7 @@ struct MainTabView: View {
 // MARK: - All Reminders Overview
 struct RemindersListView: View {
     @StateObject private var nm = NotificationManager.shared
+    @State private var editMode = false
 
     var body: some View {
         List {
@@ -51,17 +52,29 @@ struct RemindersListView: View {
                 )
             } else {
                 ForEach(nm.reminders) { reminder in
-                    ReminderRow(reminder: reminder)
-                }
-                .onDelete { idx in
-                    let toDelete = idx.map { nm.reminders[$0].id }
-                    toDelete.forEach { nm.deleteReminder(id: $0) }
+                    HStack {
+                        ReminderRow(reminder: reminder)
+                        if editMode {
+                            Spacer()
+                            Button(role: .destructive) {
+                                nm.deleteReminder(id: reminder.id)
+                            } label: {
+                                Image(systemName: "minus.circle.fill")
+                                    .foregroundStyle(.red)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
                 }
             }
         }
         .navigationTitle("🔔 提醒")
         .toolbar {
-            if !nm.reminders.isEmpty { EditButton() }
+            if !nm.reminders.isEmpty {
+                Button(editMode ? "完成" : "編輯") {
+                    editMode.toggle()
+                }
+            }
         }
         .onAppear { Task { await nm.refreshAuthStatus() } }
     }

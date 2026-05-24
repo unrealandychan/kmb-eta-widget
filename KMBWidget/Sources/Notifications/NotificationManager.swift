@@ -9,7 +9,7 @@ struct BusReminder: Codable, Identifiable, Hashable {
     let stopLabel: String
     let route: String
     let dest: String
-    let minutesBefore: Int      // notify when ETA ≤ this many minutes
+    let minutesBefore: Int
     var isEnabled: Bool = true
 }
 
@@ -65,7 +65,19 @@ final class NotificationManager: ObservableObject {
         }
     }
 
-    // MARK: - Fire a notification (called from background task or foreground check)
+    // MARK: - Check & Fire (called by BackgroundPoller every 30s)
+
+    func checkAndFireReminders() async {
+        guard !reminders.isEmpty else { return }
+        // Group reminders by stopID to minimise API calls
+        let grouped = Dictionary(grouping: reminders.filter(\.isEnabled), by: \.stopID)
+        for (stopID, stopReminders) in grouped {
+            guard let etas = try? await KMBAPIClient.routeEtas(for: stopID) else { continue }
+            for reminder in stopReminders {
+                fireIfNeeded(reminder: reminder, etas: etas)
+            }
+        }
+    }
 
     func fireIfNeeded(reminder: BusReminder, etas: [RouteEta]) {
         guard reminder.isEnabled else { return }
@@ -79,12 +91,11 @@ final class NotificationManager: ObservableObject {
             ? "\(reminder.route) 往 \(reminder.dest) 即將到達 \(reminder.stopLabel)"
             : "\(reminder.route) 往 \(reminder.dest) 約 \(mins) 分鐘後到達 \(reminder.stopLabel)"
         content.sound = .default
-        content.interruptionLevel = .timeSensitive
 
         let req = UNNotificationRequest(
             identifier: "eta-\(reminder.id)-\(mins)",
             content: content,
-            trigger: nil   // immediate
+            trigger: nil
         )
         center.add(req)
     }

@@ -1,6 +1,6 @@
 import SwiftUI
 
-// MARK: - Stop Detail + Reminders (combined view)
+// MARK: - Stop Detail + Reminders
 
 struct StopDetailWithRemindersView: View {
     let stop: SavedStop
@@ -16,20 +16,16 @@ struct StopDetailWithRemindersView: View {
 
     var body: some View {
         List {
-            // ETA section
             Section("實時到站") {
                 if isLoading {
                     HStack { ProgressView(); Text("載入中…").foregroundStyle(.secondary) }
                 } else if routes.isEmpty {
                     Text("暫無班次").foregroundStyle(.secondary)
                 } else {
-                    ForEach(routes) { r in
-                        ETARow(route: r)
-                    }
+                    ForEach(routes) { r in ETARow(route: r) }
                 }
             }
 
-            // Reminders section
             Section {
                 if stopReminders.isEmpty {
                     Text("未設定任何提醒").foregroundStyle(.secondary).font(.subheadline)
@@ -37,37 +33,30 @@ struct StopDetailWithRemindersView: View {
                     ForEach(stopReminders) { reminder in
                         ReminderRow(reminder: reminder)
                     }
-                    .onDelete { idx in
-                        let toDelete = idx.map { stopReminders[$0].id }
-                        toDelete.forEach { nm.deleteReminder(id: $0) }
-                    }
                 }
             } header: {
                 HStack {
                     Text("提醒")
                     Spacer()
                     Button { showAddReminder = true } label: {
-                        Label("新增", systemImage: "plus")
-                            .font(.caption.bold())
+                        Label("新增", systemImage: "plus").font(.caption.bold())
                     }
                 }
             }
 
-            // Notification permission banner
             if nm.authStatus == .denied {
                 Section {
                     Label("請在設定中開啟通知權限", systemImage: "bell.slash.fill")
                         .foregroundStyle(.orange)
-                    Button("開啟設定") {
-                if let url = URL(string: "x-apple.systempreferences:com.apple.preference.notifications") {
-                    NSWorkspace.shared.open(url)
-                }
+                    Button("開啟系統設定") {
+                        if let url = URL(string: "x-apple.systempreferences:com.apple.preference.notifications") {
+                            NSWorkspace.shared.open(url)
+                        }
                     }
                 }
             }
         }
         .navigationTitle(stop.label)
-        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button("關閉") { dismiss() }
@@ -93,6 +82,34 @@ struct StopDetailWithRemindersView: View {
     }
 }
 
+// MARK: - ETA Row
+
+struct ETARow: View {
+    let route: RouteEta
+    var body: some View {
+        HStack {
+            Text(route.route)
+                .font(.system(.headline, design: .monospaced))
+                .frame(width: 50, alignment: .leading)
+            Text(route.dest)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+            Spacer()
+            Text(route.etaText)
+                .font(.subheadline.bold())
+                .foregroundStyle(etaColor(route.nextMins))
+        }
+    }
+
+    func etaColor(_ mins: Int?) -> Color {
+        guard let m = mins else { return .secondary }
+        if m <= 2 { return .red }
+        if m <= 5 { return .orange }
+        return .green
+    }
+}
+
 // MARK: - Reminder Row
 
 struct ReminderRow: View {
@@ -103,19 +120,13 @@ struct ReminderRow: View {
         HStack(spacing: 12) {
             Image(systemName: "bell.fill")
                 .foregroundStyle(reminder.isEnabled ? .orange : .secondary)
-
             VStack(alignment: .leading, spacing: 2) {
                 HStack {
-                    Text(reminder.route)
-                        .font(.headline)
-                    Text("→ \(reminder.dest)")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
+                    Text(reminder.route).font(.headline)
+                    Text("→ \(reminder.dest)").font(.subheadline).foregroundStyle(.secondary).lineLimit(1)
                 }
                 Text("到站前 \(reminder.minutesBefore) 分鐘提醒")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .font(.caption).foregroundStyle(.secondary)
             }
             Spacer()
             Toggle("", isOn: Binding(
@@ -134,7 +145,6 @@ struct AddReminderSheet: View {
     let routes: [RouteEta]
     @StateObject private var nm = NotificationManager.shared
     @Environment(\.dismiss) var dismiss
-
     @State private var selectedRoute: RouteEta?
     @State private var minutesBefore = 5
 
@@ -171,8 +181,8 @@ struct AddReminderSheet: View {
                         Text("10 分鐘").tag(10)
                         Text("15 分鐘").tag(15)
                     }
-                    .pickerStyle(.wheel)
-                    .frame(height: 120)
+                    // macOS-compatible picker style (no .wheel on macOS)
+                    .pickerStyle(.radioGroup)
                 }
 
                 if let r = selectedRoute {
@@ -185,7 +195,6 @@ struct AddReminderSheet: View {
                 }
             }
             .navigationTitle("新增提醒")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("取消") { dismiss() }
@@ -193,14 +202,13 @@ struct AddReminderSheet: View {
                 ToolbarItem(placement: .primaryAction) {
                     Button("新增") {
                         guard let r = selectedRoute else { return }
-                        let reminder = BusReminder(
+                        nm.addReminder(BusReminder(
                             stopID: stop.stopID,
                             stopLabel: stop.label,
                             route: r.route,
                             dest: r.dest,
                             minutesBefore: minutesBefore
-                        )
-                        nm.addReminder(reminder)
+                        ))
                         dismiss()
                     }
                     .bold()
@@ -208,5 +216,6 @@ struct AddReminderSheet: View {
                 }
             }
         }
+        .frame(minWidth: 380, minHeight: 420)
     }
 }

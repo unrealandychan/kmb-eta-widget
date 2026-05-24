@@ -6,7 +6,7 @@ import CoreLocation
 struct NearbyStopsView: View {
     @StateObject private var loc = LocationManager.shared
     @State private var selectedStop: StopWithDistance?
-    @State private var radius: Double = 500   // metres
+    @State private var radius: Double = 500
 
     var body: some View {
         Group {
@@ -21,7 +21,7 @@ struct NearbyStopsView: View {
         }
         .navigationTitle("📍 附近巴士站")
         .onAppear {
-            if loc.authStatus == .authorizedWhenInUse || loc.authStatus == .authorizedAlways {
+            if loc.authStatus == .authorizedAlways {
                 loc.startUpdating()
             }
         }
@@ -35,8 +35,6 @@ struct NearbyStopsView: View {
             }
         }
     }
-
-    // MARK: Sub-views
 
     var permissionPrompt: some View {
         VStack(spacing: 24) {
@@ -66,12 +64,12 @@ struct NearbyStopsView: View {
                 .foregroundStyle(.red)
             Text("位置權限被拒絕")
                 .font(.title3.bold())
-            Text("請去「設定 → 私隱 → 位置服務 → KMB Widget」開啟")
+            Text("請去「系統設定 → 私隱 → 位置服務 → KMB Widget」開啟")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
-            Button("開啟設定") {
+            Button("開啟系統設定") {
                 if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_LocationServices") {
                     NSWorkspace.shared.open(url)
                 }
@@ -83,7 +81,6 @@ struct NearbyStopsView: View {
 
     var contentView: some View {
         List {
-            // Radius picker
             Section {
                 Picker("搜尋範圍", selection: $radius) {
                     Text("200m").tag(200.0)
@@ -119,7 +116,6 @@ struct NearbyStopsView: View {
                 }
             }
         }
-        .listStyle(.insetGrouped)
         .refreshable {
             loc.startUpdating()
         }
@@ -139,11 +135,8 @@ struct NearbyStopRow: View {
                     .foregroundStyle(.blue)
             }
             VStack(alignment: .leading, spacing: 2) {
-                Text(item.stop.nameTc)
-                    .font(.headline)
-                Text(item.stop.nameEn)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                Text(item.stop.nameTc).font(.headline)
+                Text(item.stop.nameEn).font(.caption).foregroundStyle(.secondary)
             }
             Spacer()
             VStack(alignment: .trailing, spacing: 2) {

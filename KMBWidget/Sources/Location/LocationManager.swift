@@ -25,36 +25,29 @@ final class LocationManager: NSObject, ObservableObject {
         authStatus = manager.authorizationStatus
     }
 
-    // MARK: - Public API
-
     func requestPermission() {
-        manager.requestWhenInUseAuthorization()
+        // macOS uses requestAlwaysAuthorization or requestLocation directly
+        manager.requestAlwaysAuthorization()
     }
 
     func startUpdating() {
-        manager.requestLocation()   // one-shot, battery-friendly
+        manager.requestLocation()
     }
 
-    /// Find stops within `radiusMeters` sorted by distance
     func findNearbyStops(radiusMeters: Double = 500) async {
         guard let loc = currentLocation else { return }
         isLoadingStops = true
         error = nil
-
         do {
             if !stopsFetched {
                 allStops = try await KMBAPIClient.allStops()
                 stopsFetched = true
             }
-            let userCL = loc
             nearbyStops = allStops
                 .compactMap { stop -> StopWithDistance? in
-                    guard
-                        let lat = Double(stop.lat),
-                        let lon = Double(stop.long)
-                    else { return nil }
+                    guard let lat = Double(stop.lat), let lon = Double(stop.long) else { return nil }
                     let stopLoc = CLLocation(latitude: lat, longitude: lon)
-                    let dist = userCL.distance(from: stopLoc)
+                    let dist = loc.distance(from: stopLoc)
                     guard dist <= radiusMeters else { return nil }
                     return StopWithDistance(stop: stop, distanceMeters: dist)
                 }
@@ -83,22 +76,21 @@ extension LocationManager: CLLocationManagerDelegate {
     nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         Task { @MainActor in
             self.authStatus = manager.authorizationStatus
-            if manager.authorizationStatus == .authorizedWhenInUse ||
-               manager.authorizationStatus == .authorizedAlways {
+            if manager.authorizationStatus == .authorizedAlways {
                 manager.requestLocation()
             }
         }
     }
 }
 
-// MARK: - Stop with distance model
+// MARK: - StopWithDistance
 struct StopWithDistance: Identifiable {
     var id: String { stop.stopID }
     let stop: KMBStop
     let distanceMeters: Double
 
     var distanceText: String {
-        distanceMeters < 100 ? "< 100m"
+        distanceMeters < 100  ? "< 100m"
             : distanceMeters < 1000 ? "\(Int(distanceMeters.rounded()))m"
             : String(format: "%.1fkm", distanceMeters / 1000)
     }
