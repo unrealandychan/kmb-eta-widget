@@ -1,0 +1,593 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		12AF4B728E13C8703746FD2C /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF42BD9EF4C7E6A3DCAD8FE1 /* NotificationManager.swift */; };
+		16647397CAD60018E5405251 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4DEE992C7E40FE14D0499B /* Models.swift */; };
+		2D48FBE904FAA3906D79E831 /* MenuBarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F01B50566262D4B84F808C /* MenuBarApp.swift */; };
+		2E684C48F8637018BC3EF186 /* MenuBarContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC147A71F53E7D6B42C839A /* MenuBarContentView.swift */; };
+		2EDD41F0E8CFC8EE4FFA0B4E /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4DEE992C7E40FE14D0499B /* Models.swift */; };
+		49A4A83D5E0F0E7F1B8B6018 /* KMBAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85853F6E0BBC898BED8B8844 /* KMBAPIClient.swift */; };
+		49E60E006732772CAC456069 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF8D180031A7F2903915CD1 /* LocationManager.swift */; };
+		4B4AD0066A19C452DD2DFF23 /* NearbyStopsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C48696B7F81C9059E4BD79 /* NearbyStopsView.swift */; };
+		5573C0E09504A3F356E6A04A /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4DEE992C7E40FE14D0499B /* Models.swift */; };
+		570368774625730732CE47C0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9FDB9E8C597161B1BD24832 /* ContentView.swift */; };
+		75D1B424FBCD48F53DE9069E /* BackgroundTaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063E145137914E8EF2D5C70 /* BackgroundTaskManager.swift */; };
+		8E027FF2F4263635CF09B6E6 /* KMBWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1267202C651B289F0E42C812 /* KMBWidget.swift */; };
+		A2C261A0C0B6B4D982B1908E /* ReminderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F043F762FD10075914DFECB /* ReminderView.swift */; };
+		B3D416FAFF79C6E63D46044A /* KMBAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85853F6E0BBC898BED8B8844 /* KMBAPIClient.swift */; };
+		B9A3BF73551430AEF31311BE /* MenuBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44F46334B7A24317780619A /* MenuBarViewModel.swift */; };
+		E0445FA70A8D04218DE37C93 /* KMBAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85853F6E0BBC898BED8B8844 /* KMBAPIClient.swift */; };
+		E73C2EBF220C5E07F445F027 /* KMBWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = DEBFB2522C9C93BCE75D70D8 /* KMBWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F1240CF4581903F1C4C22178 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA015B34B7AF1848C3DDCD3 /* App.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C0203FC6531DD5C29548DA55 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 051B16373C22B2E5F3E7F6F3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4215134A6EB806CD5F3E6381;
+			remoteInfo = KMBWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8E7480C95A70D06968DDBB8A /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				E73C2EBF220C5E07F445F027 /* KMBWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0FF8D180031A7F2903915CD1 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		1267202C651B289F0E42C812 /* KMBWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KMBWidget.swift; sourceTree = "<group>"; };
+		1F043F762FD10075914DFECB /* ReminderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderView.swift; sourceTree = "<group>"; };
+		4A44FACB2688A8ABB00F904B /* KMBWidget.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KMBWidget.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5063E145137914E8EF2D5C70 /* BackgroundTaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundTaskManager.swift; sourceTree = "<group>"; };
+		7CC147A71F53E7D6B42C839A /* MenuBarContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarContentView.swift; sourceTree = "<group>"; };
+		85853F6E0BBC898BED8B8844 /* KMBAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KMBAPIClient.swift; sourceTree = "<group>"; };
+		CF42BD9EF4C7E6A3DCAD8FE1 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		D44F46334B7A24317780619A /* MenuBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarViewModel.swift; sourceTree = "<group>"; };
+		D6F01B50566262D4B84F808C /* MenuBarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarApp.swift; sourceTree = "<group>"; };
+		D9FDB9E8C597161B1BD24832 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		DEBFB2522C9C93BCE75D70D8 /* KMBWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = KMBWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1C48696B7F81C9059E4BD79 /* NearbyStopsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyStopsView.swift; sourceTree = "<group>"; };
+		FA4DEE992C7E40FE14D0499B /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		FAA015B34B7AF1848C3DDCD3 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
+		FFEAE97B6816A67E736FE348 /* KMBMenuBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KMBMenuBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		249E1604BF7F0263E71A2001 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				85853F6E0BBC898BED8B8844 /* KMBAPIClient.swift */,
+			);
+			name = API;
+			path = KMBWidget/Sources/API;
+			sourceTree = "<group>";
+		};
+		34B0F2D22E6B431CEBEC2600 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FA4DEE992C7E40FE14D0499B /* Models.swift */,
+			);
+			name = Models;
+			path = KMBWidget/Sources/Models;
+			sourceTree = "<group>";
+		};
+		3EB2ED7B42669098BA501327 = {
+			isa = PBXGroup;
+			children = (
+				249E1604BF7F0263E71A2001 /* API */,
+				34B0F2D22E6B431CEBEC2600 /* Models */,
+				568CB912130514C57CBC44CD /* Sources */,
+				F00673D0C63A57C8B6579660 /* Sources */,
+				890EE55D9DBCF0D8A06638DE /* Sources */,
+				E9212ED53B81787B5CECA200 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		568CB912130514C57CBC44CD /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				D6F01B50566262D4B84F808C /* MenuBarApp.swift */,
+				7CC147A71F53E7D6B42C839A /* MenuBarContentView.swift */,
+				D44F46334B7A24317780619A /* MenuBarViewModel.swift */,
+			);
+			name = Sources;
+			path = KMBMenuBar/Sources;
+			sourceTree = "<group>";
+		};
+		890EE55D9DBCF0D8A06638DE /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				1267202C651B289F0E42C812 /* KMBWidget.swift */,
+			);
+			name = Sources;
+			path = KMBWidgetExtension/Sources;
+			sourceTree = "<group>";
+		};
+		C5FE86151F9B60B748932812 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				5063E145137914E8EF2D5C70 /* BackgroundTaskManager.swift */,
+				CF42BD9EF4C7E6A3DCAD8FE1 /* NotificationManager.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+		E9212ED53B81787B5CECA200 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FFEAE97B6816A67E736FE348 /* KMBMenuBar.app */,
+				4A44FACB2688A8ABB00F904B /* KMBWidget.app */,
+				DEBFB2522C9C93BCE75D70D8 /* KMBWidgetExtension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F00673D0C63A57C8B6579660 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				FAA015B34B7AF1848C3DDCD3 /* App.swift */,
+				249E1604BF7F0263E71A2001 /* API */,
+				FB6047F1C4D1873DAB16ABCD /* Location */,
+				34B0F2D22E6B431CEBEC2600 /* Models */,
+				C5FE86151F9B60B748932812 /* Notifications */,
+				FC26996C24F7726E732B3950 /* Views */,
+			);
+			name = Sources;
+			path = KMBWidget/Sources;
+			sourceTree = "<group>";
+		};
+		FB6047F1C4D1873DAB16ABCD /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				0FF8D180031A7F2903915CD1 /* LocationManager.swift */,
+			);
+			path = Location;
+			sourceTree = "<group>";
+		};
+		FC26996C24F7726E732B3950 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D9FDB9E8C597161B1BD24832 /* ContentView.swift */,
+				F1C48696B7F81C9059E4BD79 /* NearbyStopsView.swift */,
+				1F043F762FD10075914DFECB /* ReminderView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4215134A6EB806CD5F3E6381 /* KMBWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 47799D157D9A9A78CA531846 /* Build configuration list for PBXNativeTarget "KMBWidgetExtension" */;
+			buildPhases = (
+				E1FFBDC51EB65DC2D9B2BABA /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KMBWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = KMBWidgetExtension;
+			productReference = DEBFB2522C9C93BCE75D70D8 /* KMBWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		B579ED690E6DBC43E2A69679 /* KMBMenuBar */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 30363367AAE405CF041EBDFD /* Build configuration list for PBXNativeTarget "KMBMenuBar" */;
+			buildPhases = (
+				1B1838BAF99DFF0C1696856F /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KMBMenuBar;
+			packageProductDependencies = (
+			);
+			productName = KMBMenuBar;
+			productReference = FFEAE97B6816A67E736FE348 /* KMBMenuBar.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D8B5BE3C5053680180B1C01E /* KMBWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AAEEA71A3CAA367702961762 /* Build configuration list for PBXNativeTarget "KMBWidget" */;
+			buildPhases = (
+				12F2D2972FC39F986B00F601 /* Sources */,
+				8E7480C95A70D06968DDBB8A /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4E3624E94B835198858A4BEC /* PBXTargetDependency */,
+			);
+			name = KMBWidget;
+			packageProductDependencies = (
+			);
+			productName = KMBWidget;
+			productReference = 4A44FACB2688A8ABB00F904B /* KMBWidget.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		051B16373C22B2E5F3E7F6F3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					4215134A6EB806CD5F3E6381 = {
+						DevelopmentTeam = "";
+					};
+					B579ED690E6DBC43E2A69679 = {
+						DevelopmentTeam = "";
+					};
+					D8B5BE3C5053680180B1C01E = {
+						DevelopmentTeam = "";
+					};
+				};
+			};
+			buildConfigurationList = 8CF6697B5D7EED351161CAB3 /* Build configuration list for PBXProject "KMBWidget" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 3EB2ED7B42669098BA501327;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = E9212ED53B81787B5CECA200 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B579ED690E6DBC43E2A69679 /* KMBMenuBar */,
+				D8B5BE3C5053680180B1C01E /* KMBWidget */,
+				4215134A6EB806CD5F3E6381 /* KMBWidgetExtension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		12F2D2972FC39F986B00F601 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1240CF4581903F1C4C22178 /* App.swift in Sources */,
+				75D1B424FBCD48F53DE9069E /* BackgroundTaskManager.swift in Sources */,
+				570368774625730732CE47C0 /* ContentView.swift in Sources */,
+				B3D416FAFF79C6E63D46044A /* KMBAPIClient.swift in Sources */,
+				49E60E006732772CAC456069 /* LocationManager.swift in Sources */,
+				5573C0E09504A3F356E6A04A /* Models.swift in Sources */,
+				4B4AD0066A19C452DD2DFF23 /* NearbyStopsView.swift in Sources */,
+				12AF4B728E13C8703746FD2C /* NotificationManager.swift in Sources */,
+				A2C261A0C0B6B4D982B1908E /* ReminderView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1B1838BAF99DFF0C1696856F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49A4A83D5E0F0E7F1B8B6018 /* KMBAPIClient.swift in Sources */,
+				2D48FBE904FAA3906D79E831 /* MenuBarApp.swift in Sources */,
+				2E684C48F8637018BC3EF186 /* MenuBarContentView.swift in Sources */,
+				B9A3BF73551430AEF31311BE /* MenuBarViewModel.swift in Sources */,
+				2EDD41F0E8CFC8EE4FFA0B4E /* Models.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E1FFBDC51EB65DC2D9B2BABA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E0445FA70A8D04218DE37C93 /* KMBAPIClient.swift in Sources */,
+				8E027FF2F4263635CF09B6E6 /* KMBWidget.swift in Sources */,
+				16647397CAD60018E5405251 /* Models.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4E3624E94B835198858A4BEC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4215134A6EB806CD5F3E6381 /* KMBWidgetExtension */;
+			targetProxy = C0203FC6531DD5C29548DA55 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		2EB8A88EE85450C21A5F339C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = KMBMenuBar/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.eddie.kmbwidget.menubar;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		3DC03DF695797439CA5D063D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.10;
+			};
+			name = Release;
+		};
+		5787B35F04C5AC8087B11B0D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = KMBMenuBar/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.eddie.kmbwidget.menubar;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		75C8E93920AAACDA8343F32C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = KMBWidget/KMBWidget.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = YES;
+				INFOPLIST_FILE = KMBWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.eddie.kmbwidget;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		B06F14AEFD48EC484609731A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = KMBWidgetExtension/KMBWidgetExtension.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = YES;
+				INFOPLIST_FILE = KMBWidgetExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.eddie.kmbwidget.widget;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		B0D10B7BAB022DCE3CFDB711 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.10;
+			};
+			name = Debug;
+		};
+		CBC4DB5B9C6CBB1FADE132B9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = KMBWidgetExtension/KMBWidgetExtension.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = YES;
+				INFOPLIST_FILE = KMBWidgetExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.eddie.kmbwidget.widget;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		DAAB8AFA8D9A508A7FD2B2FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = KMBWidget/KMBWidget.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = YES;
+				INFOPLIST_FILE = KMBWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.eddie.kmbwidget;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		30363367AAE405CF041EBDFD /* Build configuration list for PBXNativeTarget "KMBMenuBar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2EB8A88EE85450C21A5F339C /* Debug */,
+				5787B35F04C5AC8087B11B0D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		47799D157D9A9A78CA531846 /* Build configuration list for PBXNativeTarget "KMBWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CBC4DB5B9C6CBB1FADE132B9 /* Debug */,
+				B06F14AEFD48EC484609731A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		8CF6697B5D7EED351161CAB3 /* Build configuration list for PBXProject "KMBWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B0D10B7BAB022DCE3CFDB711 /* Debug */,
+				3DC03DF695797439CA5D063D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		AAEEA71A3CAA367702961762 /* Build configuration list for PBXNativeTarget "KMBWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75C8E93920AAACDA8343F32C /* Debug */,
+				DAAB8AFA8D9A508A7FD2B2FA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 051B16373C22B2E5F3E7F6F3 /* Project object */;
+}

@@ -1,17 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-    <!-- macOS App Sandbox — mandatory for WidgetKit extensions -->
-    <key>com.apple.security.app-sandbox</key>
-    <true/>
-    <!-- Network access: KMB ETA API calls from within the extension -->
-    <key>com.apple.security.network.client</key>
-    <true/>
-    <!-- Shared UserDefaults with host app (reads WidgetConfig / SavedStops) -->
-    <key>com.apple.security.application-groups</key>
-    <array>
-        <string>group.com.eddie.kmbwidget</string>
-    </array>
-</dict>
+<dict/>
 </plist>

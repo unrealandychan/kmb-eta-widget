@@ -212,7 +212,7 @@ struct ETAMacRow: View {
                 .foregroundStyle(.white)
                 .padding(.horizontal, 7)
                 .padding(.vertical, 2)
-                .background(RoundedRectangle(cornerRadius: 5).fill(Color(hex: "#1C4CBF")))
+                .background(RoundedRectangle(cornerRadius: 5).fill(Color("#1C4CBF")))
                 .frame(width: 52, alignment: .leading)
                 .padding(.leading, 14)
 
