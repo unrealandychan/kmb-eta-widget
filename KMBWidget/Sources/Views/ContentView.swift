@@ -241,42 +241,43 @@ struct StopSearchView: View {
     }
 
     func stopRow(_ stop: KMBStop) -> some View {
-        Button {
-            onSelect(stop)
-            dismiss()
-        } label: {
-            HStack(spacing: 12) {
-                Image(systemName: "mappin.circle.fill")
-                    .foregroundStyle(.blue)
-                    .font(.title3)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(stop.nameTc)
-                        .font(.headline)
-                        .foregroundStyle(.primary)
-                    Text(stop.nameEn)
+        VStack(spacing: 0) {
+            Button {
+                onSelect(stop)
+                dismiss()
+            } label: {
+                HStack(spacing: 12) {
+                    Image(systemName: "mappin.circle.fill")
+                        .foregroundStyle(.blue)
+                        .font(.title3)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(stop.nameTc)
+                            .font(.headline)
+                            .foregroundStyle(.primary)
+                        Text(stop.nameEn)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Text("站號：\(stop.stopID)")
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
+                    }
+                    Spacer()
+                    Image(systemName: "chevron.right")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Text("站號：\(stop.stopID)")
-                        .font(.caption2)
                         .foregroundStyle(.tertiary)
                 }
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .font(.caption)
-                    .foregroundStyle(.tertiary)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
+                .contentShape(Rectangle())
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 10)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-        .background(selectedStop?.stopID == stop.stopID ? Color.accentColor.opacity(0.1) : Color.clear)
-        .onHover { hovering in
-            if hovering { selectedStop = stop } else { selectedStop = nil }
-        }
+            .buttonStyle(.plain)
+            .background(selectedStop?.stopID == stop.stopID ? Color.accentColor.opacity(0.1) : Color.clear)
+            .onHover { hovering in
+                if hovering { selectedStop = stop } else { selectedStop = nil }
+            }
 
-        // Divider at bottom
-        Divider().padding(.leading, 52)
+            Divider().padding(.leading, 52)
+        }
     }
 
     func search(_ kw: String) async {
