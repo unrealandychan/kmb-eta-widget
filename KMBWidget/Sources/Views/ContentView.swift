@@ -321,7 +321,7 @@ struct StopDetailView: View {
         }
         .navigationTitle(stop.label)
         .refreshable { await loadData() }
-        .task { await loadData() }
+        .task(id: stop.stopID) { await loadData() }
     }
 
     func loadData() async {

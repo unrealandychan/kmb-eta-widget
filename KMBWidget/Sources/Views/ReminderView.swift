@@ -62,7 +62,7 @@ struct StopDetailWithRemindersView: View {
                 Button("關閉") { dismiss() }
             }
         }
-        .task { await loadData() }
+        .task(id: stop.stopID) { await loadData() }
         .refreshable { await loadData() }
         .sheet(isPresented: $showAddReminder) {
             AddReminderSheet(stop: stop, routes: routes)
