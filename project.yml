@@ -4,6 +4,22 @@ options:
   deploymentTarget:
     macOS: "14.0"
   xcodeVersion: "15.0"
+  createIntermediateGroups: true
+
+schemes:
+  KMBWidget:
+    build:
+      targets:
+        KMBWidget: all
+        KMBWidgetExtension: all
+    run:
+      config: Debug
+      targets:
+        - KMBWidget
+    test:
+      config: Debug
+    archive:
+      config: Release
 
 settings:
   base:
