@@ -141,7 +141,6 @@ struct NearbyStopsView: View {
         config.stops.append(saved)
         config.save()
         savedStopIDs.insert(stop.stopID)
-        WidgetCenter.shared.reloadAllTimelines()
     }
 }
 
