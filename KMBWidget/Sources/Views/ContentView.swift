@@ -1,6 +1,10 @@
 import SwiftUI
-import WidgetKit
 import AppKit
+
+// MARK: - Shared notification for config changes
+extension Notification.Name {
+    static let widgetConfigChanged = Notification.Name("widgetConfigChanged")
+}
 
 // MARK: - Main App ContentView
 
@@ -39,9 +43,12 @@ struct ContentView: View {
                     if !config.stops.contains(where: { $0.stopID == saved.stopID }) {
                         config.stops.append(saved)
                         config.save()
-                        WidgetCenter.shared.reloadAllTimelines()
+                        NotificationCenter.default.post(name: .widgetConfigChanged, object: nil)
                     }
                 }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .widgetConfigChanged)) { _ in
+                config = WidgetConfig.load()
             }
         }
     }
