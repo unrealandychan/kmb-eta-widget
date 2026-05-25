@@ -47,7 +47,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.eddie.kmbwidget.widget
         INFOPLIST_FILE: KMBWidgetExtension/Info.plist
         CODE_SIGN_ENTITLEMENTS: KMBWidgetExtension/KMBWidgetExtension.entitlements
-        ENABLE_APP_SANDBOX: YES
+        ENABLE_APP_SANDBOX: NO
     entitlements:
       path: KMBWidgetExtension/KMBWidgetExtension.entitlements
 

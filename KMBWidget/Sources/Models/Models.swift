@@ -96,10 +96,12 @@ let kAppGroup = "group.com.eddie.kmbwidget"
 // MARK: - WidgetConfig Persistence (App Group UserDefaults)
 
 extension WidgetConfig {
-    // File-based storage — works without Apple Developer signing / App Group entitlement
+    // File-based storage — shared path accessible by both App and Widget Extension
     static var configFileURL: URL {
-        let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        let dir = appSupport.appendingPathComponent("KMBWidget", isDirectory: true)
+        // Use the main app's container so both App and Extension read the same file
+        let home = FileManager.default.homeDirectoryForCurrentUser
+        let dir = home
+            .appendingPathComponent("Library/Containers/com.eddie.kmbwidget/Data/Library/Application Support/KMBWidget", isDirectory: true)
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         return dir.appendingPathComponent("widgetConfig.json")
     }
