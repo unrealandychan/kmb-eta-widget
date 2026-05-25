@@ -300,13 +300,17 @@ struct StopDetailView: View {
     @State private var routes: [RouteEta] = []
     @State private var isLoading = true
     @State private var lastUpdated = Date()
+    @State private var errorMsg: String? = nil
 
     var body: some View {
         List {
             if isLoading {
                 HStack { ProgressView(); Text("載入中…").foregroundStyle(.secondary) }
+            } else if let err = errorMsg {
+                Label(err, systemImage: "exclamationmark.triangle").foregroundStyle(.red)
+                    .font(.caption)
             } else if routes.isEmpty {
-                Text("暫無班次數據").foregroundStyle(.secondary)
+                Text("暫無班次數據 (stopID: \(stop.stopID))").foregroundStyle(.secondary)
             } else {
                 Section("實時到站時間") {
                     ForEach(routes) { r in
@@ -326,7 +330,13 @@ struct StopDetailView: View {
 
     func loadData() async {
         isLoading = routes.isEmpty
-        routes = (try? await KMBAPIClient.routeEtas(for: stop.stopID)) ?? []
+        errorMsg = nil
+        do {
+            routes = try await KMBAPIClient.routeEtas(for: stop.stopID)
+        } catch {
+            errorMsg = error.localizedDescription
+            routes = []
+        }
         lastUpdated = Date()
         isLoading = false
     }
