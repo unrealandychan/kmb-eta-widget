@@ -8,7 +8,6 @@ struct StopDetailWithRemindersView: View {
     @State private var routes: [RouteEta] = []
     @State private var isLoading = true
     @State private var showAddReminder = false
-    @Environment(\.dismiss) var dismiss
 
     var stopReminders: [BusReminder] {
         nm.reminders.filter { $0.stopID == stop.stopID }
@@ -58,8 +57,17 @@ struct StopDetailWithRemindersView: View {
         }
         .navigationTitle(stop.label)
         .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button("關閉") { dismiss() }
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    Task { await loadData() }
+                } label: {
+                    if isLoading {
+                        ProgressView().controlSize(.small)
+                    } else {
+                        Label("重新整理", systemImage: "arrow.clockwise")
+                    }
+                }
+                .disabled(isLoading)
             }
         }
         .task(id: stop.stopID) { await loadData() }

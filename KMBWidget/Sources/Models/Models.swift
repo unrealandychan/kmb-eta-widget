@@ -98,10 +98,17 @@ let kAppGroup = "group.com.eddie.kmbwidget"
 extension WidgetConfig {
     // File-based storage — shared path accessible by both App and Widget Extension
     static var configFileURL: URL {
-        // Use the main app's container so both App and Extension read the same file
+        #if WIDGET_EXTENSION
+        // Extension runs outside sandbox, read directly from main app container
         let home = FileManager.default.homeDirectoryForCurrentUser
-        let dir = home
-            .appendingPathComponent("Library/Containers/com.eddie.kmbwidget/Data/Library/Application Support/KMBWidget", isDirectory: true)
+        let dir = home.appendingPathComponent(
+            "Library/Containers/com.eddie.kmbwidget/Data/Library/Application Support/KMBWidget",
+            isDirectory: true)
+        #else
+        // Main app: use standard Application Support (sandboxed path resolves correctly)
+        let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+        let dir = appSupport.appendingPathComponent("KMBWidget", isDirectory: true)
+        #endif
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         return dir.appendingPathComponent("widgetConfig.json")
     }

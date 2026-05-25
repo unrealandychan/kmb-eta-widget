@@ -75,7 +75,7 @@ struct ContentView: View {
         List {
             ForEach(config.stops) { stop in
                 HStack {
-                    NavigationLink(destination: StopDetailView(stop: stop)) {
+                    NavigationLink(destination: StopDetailWithRemindersView(stop: stop)) {
                         stopRow(stop)
                     }
                     if editMode {
