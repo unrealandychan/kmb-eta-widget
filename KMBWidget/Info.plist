@@ -14,7 +14,7 @@
     <string>$(MARKETING_VERSION)</string>
     <key>CFBundleVersion</key>
     <string>$(CURRENT_PROJECT_VERSION)</string>
-    <key>NSLocationUsageDescription</key>
+    <key>NSLocationWhenInUseUsageDescription</key>
     <string>用於搜尋附近的九巴巴士站，方便你快速查看到站時間</string>
     <key>NSAppTransportSecurity</key>
     <dict>

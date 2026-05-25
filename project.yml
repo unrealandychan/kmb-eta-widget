@@ -65,3 +65,6 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.eddie.kmbwidget.menubar
         INFOPLIST_FILE: KMBMenuBar/Info.plist
         MACOSX_DEPLOYMENT_TARGET: "14.0"
+        CODE_SIGN_ENTITLEMENTS: KMBMenuBar/KMBMenuBar.entitlements
+    entitlements:
+      path: KMBMenuBar/KMBMenuBar.entitlements
