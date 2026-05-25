@@ -209,26 +209,26 @@ struct StopSearchView: View {
                     Spacer()
                 }
             } else {
-                ScrollView {
-                    LazyVStack(alignment: .leading, spacing: 0) {
-                        ForEach(results) { stop in
-                            stopRow(stop)
-                        }
-                    }
+                // Use List instead of ScrollView+LazyVStack — macOS List handles
+                // click events reliably; ScrollView+LazyVStack intercepts taps as scroll gestures
+                List(results) { stop in
+                    stopRow(stop)
                 }
+                .listStyle(.plain)
             }
         }
         .frame(minWidth: 440, minHeight: 500)
         .background(Color(nsColor: .windowBackgroundColor))
-        .onAppear {
-            // Force window to front and focus the text field
-            NSApp.activate(ignoringOtherApps: true)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        // Fix: use .task for focus — waits for sheet animation to complete
+        // before setting focus, unlike onAppear which fires too early
+        .task {
+            try? await Task.sleep(for: .milliseconds(500))
+            await MainActor.run {
+                NSApp.activate(ignoringOtherApps: true)
                 searchFocused = true
             }
         }
         .onChange(of: query) { _, new in
-            // Auto search after 2+ chars with debounce
             guard new.count >= 2 else {
                 if new.isEmpty { results = [] }
                 return
