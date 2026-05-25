@@ -24,7 +24,12 @@ final class NotificationManager: ObservableObject {
 
     private let center = UNUserNotificationCenter.current()
     private let remindersKey = "busReminders"
-    private let defaults = UserDefaults(suiteName: kAppGroup)!
+    private var remindersFileURL: URL {
+        let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+        let dir = appSupport.appendingPathComponent("KMBWidget", isDirectory: true)
+        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        return dir.appendingPathComponent("reminders.json")
+    }
 
     init() {
         loadReminders()
@@ -104,13 +109,13 @@ final class NotificationManager: ObservableObject {
 
     private func saveReminders() {
         if let data = try? JSONEncoder().encode(reminders) {
-            defaults.set(data, forKey: remindersKey)
+            try? data.write(to: remindersFileURL, options: .atomic)
         }
     }
 
     private func loadReminders() {
         guard
-            let data = defaults.data(forKey: remindersKey),
+            let data = try? Data(contentsOf: remindersFileURL),
             let loaded = try? JSONDecoder().decode([BusReminder].self, from: data)
         else { return }
         reminders = loaded

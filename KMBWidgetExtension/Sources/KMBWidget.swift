@@ -90,6 +90,10 @@ struct KMBProvider: AppIntentTimelineProvider {
     private func fetchEntry(configuration: SelectStopIntent) async -> KMBEntry {
         // Resolve which stop to show — from AppEntity picker or fallback to first saved
         let config = WidgetConfig.load()
+        // DEBUG: log path so we can verify
+        let url = WidgetConfig.configFileURL
+        let exists = FileManager.default.fileExists(atPath: url.path)
+        NSLog("[KMBWidget] configFileURL=\(url.path) exists=\(exists) stops=\(config.stops.count)")
         let stop: SavedStop?
         if let entity = configuration.stop {
             stop = config.stops.first(where: { $0.stopID == entity.id })
