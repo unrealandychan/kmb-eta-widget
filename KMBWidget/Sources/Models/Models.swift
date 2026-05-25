@@ -22,7 +22,7 @@ struct KMBEtaEntry: Codable, Identifiable {
     var id: String { "\(route)-\(seq)-\(eta ?? "nil")" }
     let route: String
     let dir: String
-    let serviceType: String
+    let serviceType: Int
     let seq: Int
     let destTc: String?
     let destEn: String?

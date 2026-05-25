@@ -7,6 +7,9 @@ struct NearbyStopsView: View {
     @StateObject private var loc = LocationManager.shared
     @State private var selectedStop: StopWithDistance?
     @State private var radius: Double = 500
+    @State private var savedStopIDs: Set<String> = {
+        Set(WidgetConfig.load().stops.map { $0.stopID })
+    }()
 
     var body: some View {
         Group {
@@ -108,10 +111,21 @@ struct NearbyStopsView: View {
             } else {
                 Section("\(loc.nearbyStops.count) 個巴士站（\(Int(radius))m 內）") {
                     ForEach(loc.nearbyStops) { item in
-                        Button { selectedStop = item } label: {
-                            NearbyStopRow(item: item)
+                        HStack {
+                            Button { selectedStop = item } label: {
+                                NearbyStopRow(item: item)
+                            }
+                            .buttonStyle(.plain)
+                            Spacer()
+                            Button {
+                                addStop(item.stop)
+                            } label: {
+                                Image(systemName: savedStopIDs.contains(item.stop.stopID) ? "checkmark.circle.fill" : "plus.circle.fill")
+                                    .font(.title2)
+                                    .foregroundStyle(savedStopIDs.contains(item.stop.stopID) ? .green : .blue)
+                            }
+                            .buttonStyle(.plain)
                         }
-                        .buttonStyle(.plain)
                     }
                 }
             }
@@ -119,6 +133,15 @@ struct NearbyStopsView: View {
         .refreshable {
             loc.startUpdating()
         }
+    }
+    func addStop(_ stop: KMBStop) {
+        guard !savedStopIDs.contains(stop.stopID) else { return }
+        var config = WidgetConfig.load()
+        let saved = SavedStop(stopID: stop.stopID, label: stop.nameTc, nameTc: stop.nameTc)
+        config.stops.append(saved)
+        config.save()
+        savedStopIDs.insert(stop.stopID)
+        WidgetCenter.shared.reloadAllTimelines()
     }
 }
 
