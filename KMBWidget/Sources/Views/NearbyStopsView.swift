@@ -21,7 +21,7 @@ struct NearbyStopsView: View {
         }
         .navigationTitle("📍 附近巴士站")
         .onAppear {
-            if loc.authStatus == .authorizedWhenInUse || loc.authStatus == .authorized {
+            if loc.authStatus == .authorized {
                 loc.startUpdating()
             }
         }

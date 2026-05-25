@@ -26,8 +26,8 @@ final class LocationManager: NSObject, ObservableObject {
     }
 
     func requestPermission() {
-        // macOS uses requestAlwaysAuthorization or requestLocation directly
-        manager.requestAlwaysAuthorization()
+        // macOS: requestAlwaysAuthorization not available, use requestWhenInUseAuthorization
+        manager.requestWhenInUseAuthorization()
     }
 
     func startUpdating() {
@@ -76,7 +76,7 @@ extension LocationManager: CLLocationManagerDelegate {
     nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         Task { @MainActor in
             self.authStatus = manager.authorizationStatus
-            if manager.authorizationStatus == .authorizedAlways {
+            if manager.authorizationStatus == .authorized {
                 manager.requestLocation()
             }
         }
