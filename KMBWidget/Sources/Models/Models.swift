@@ -99,9 +99,10 @@ extension WidgetConfig {
     // File-based storage — shared path accessible by both App and Widget Extension
     static var configFileURL: URL {
         #if WIDGET_EXTENSION
-        // Extension runs outside sandbox, read directly from main app container
-        let home = FileManager.default.homeDirectoryForCurrentUser
-        let dir = home.appendingPathComponent(
+        // Extension: homeDirectoryForCurrentUser returns container root, not real home
+        // Use NSUserName() to build the absolute real home path
+        let realHome = URL(fileURLWithPath: "/Users/\(NSUserName())")
+        let dir = realHome.appendingPathComponent(
             "Library/Containers/com.eddie.kmbwidget/Data/Library/Application Support/KMBWidget",
             isDirectory: true)
         #else
