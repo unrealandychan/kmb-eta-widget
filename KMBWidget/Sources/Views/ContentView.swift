@@ -326,6 +326,20 @@ struct StopDetailView: View {
         .navigationTitle(stop.label)
         .refreshable { await loadData() }
         .task(id: stop.stopID) { await loadData() }
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    Task { await loadData() }
+                } label: {
+                    if isLoading {
+                        ProgressView().controlSize(.small)
+                    } else {
+                        Label("重新整理", systemImage: "arrow.clockwise")
+                    }
+                }
+                .disabled(isLoading)
+            }
+        }
     }
 
     func loadData() async {
