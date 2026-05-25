@@ -96,20 +96,11 @@ let kAppGroup = "group.com.eddie.kmbwidget"
 // MARK: - WidgetConfig Persistence (App Group UserDefaults)
 
 extension WidgetConfig {
-    // File-based storage — shared path accessible by both App and Widget Extension
+    // File-based storage — both App (sandboxed) and Extension (no sandbox) use same hardcoded path
+    // The main app's sandbox maps applicationSupportDirectory to this container path automatically.
+    // The Extension (ENABLE_APP_SANDBOX=NO) can read it directly via the real filesystem path.
     static var configFileURL: URL {
-        #if WIDGET_EXTENSION
-        // Extension: homeDirectoryForCurrentUser returns container root, not real home
-        // Use NSUserName() to build the absolute real home path
-        let realHome = URL(fileURLWithPath: "/Users/\(NSUserName())")
-        let dir = realHome.appendingPathComponent(
-            "Library/Containers/com.eddie.kmbwidget/Data/Library/Application Support/KMBWidget",
-            isDirectory: true)
-        #else
-        // Main app: use standard Application Support (sandboxed path resolves correctly)
-        let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        let dir = appSupport.appendingPathComponent("KMBWidget", isDirectory: true)
-        #endif
+        let dir = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Containers/com.eddie.kmbwidget/Data/Library/Application Support/KMBWidget")
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         return dir.appendingPathComponent("widgetConfig.json")
     }
