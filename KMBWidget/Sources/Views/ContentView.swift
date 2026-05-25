@@ -83,7 +83,7 @@ struct ContentView: View {
                         Button(role: .destructive) {
                             config.stops.removeAll { $0.stopID == stop.stopID }
                             config.save()
-                            WidgetCenter.shared.reloadAllTimelines()
+                            NotificationCenter.default.post(name: .widgetConfigChanged, object: nil)
                         } label: {
                             Image(systemName: "minus.circle.fill")
                                 .foregroundStyle(.red)
@@ -95,7 +95,7 @@ struct ContentView: View {
             .onMove { from, to in
                 config.stops.move(fromOffsets: from, toOffset: to)
                 config.save()
-                WidgetCenter.shared.reloadAllTimelines()
+                NotificationCenter.default.post(name: .widgetConfigChanged, object: nil)
             }
 
             Section {
