@@ -265,6 +265,7 @@ struct MacStopSearchView: View {
     @State private var query = ""
     @State private var results: [KMBStop] = []
     @State private var isLoading = false
+    @FocusState private var searchFocused: Bool
 
     var body: some View {
         VStack(spacing: 0) {
@@ -273,12 +274,14 @@ struct MacStopSearchView: View {
                 Image(systemName: "magnifyingglass").foregroundStyle(.secondary)
                 TextField("搜尋巴士站（中文或英文）", text: $query)
                     .textFieldStyle(.plain)
+                    .focused($searchFocused)
                     .onSubmit { Task { await search() } }
                 if isLoading { ProgressView().controlSize(.small) }
             }
             .padding(10)
             .background(Color(nsColor: .controlBackgroundColor))
             .clipShape(RoundedRectangle(cornerRadius: 8))
+            .overlay(RoundedRectangle(cornerRadius: 8).stroke(searchFocused ? Color.accentColor : Color.clear, lineWidth: 2))
             .padding(12)
             .onChange(of: query) { _, new in
                 guard new.count >= 2 else { results = []; return }
@@ -311,6 +314,10 @@ struct MacStopSearchView: View {
                     .keyboardShortcut(.escape)
             }
             .padding(10)
+        }
+        .task {
+            try? await Task.sleep(for: .milliseconds(300))
+            searchFocused = true
         }
     }
 
