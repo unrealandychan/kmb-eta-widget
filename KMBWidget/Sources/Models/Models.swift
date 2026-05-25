@@ -96,20 +96,24 @@ let kAppGroup = "group.com.eddie.kmbwidget"
 // MARK: - WidgetConfig Persistence (App Group UserDefaults)
 
 extension WidgetConfig {
+    // File-based storage — works without Apple Developer signing / App Group entitlement
+    static var configFileURL: URL {
+        let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+        let dir = appSupport.appendingPathComponent("KMBWidget", isDirectory: true)
+        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        return dir.appendingPathComponent("widgetConfig.json")
+    }
+
     static func load() -> WidgetConfig {
         guard
-            let defaults = UserDefaults(suiteName: kAppGroup),
-            let data = defaults.data(forKey: "widgetConfig"),
+            let data = try? Data(contentsOf: configFileURL),
             let config = try? JSONDecoder().decode(WidgetConfig.self, from: data)
         else { return .default }
         return config
     }
 
     func save() {
-        guard
-            let defaults = UserDefaults(suiteName: kAppGroup),
-            let data = try? JSONEncoder().encode(self)
-        else { return }
-        defaults.set(data, forKey: "widgetConfig")
+        guard let data = try? JSONEncoder().encode(self) else { return }
+        try? data.write(to: WidgetConfig.configFileURL, options: .atomic)
     }
 }
