@@ -231,7 +231,7 @@ struct StopSearchView: View {
         .task {
             try? await Task.sleep(for: .milliseconds(500))
             await MainActor.run {
-                NSApp.activate(ignoringOtherApps: true)
+                NSApp.activate()
                 searchFocused = true
             }
         }

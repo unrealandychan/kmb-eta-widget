@@ -344,7 +344,7 @@ func urgencyColor(_ mins: Int?) -> Color {
 
 // MARK: - Widget Entry Point
 
-struct KMBWidgetExtension: Widget {
+struct KMBEtaWidget: Widget {
     let kind = "KMBWidget"
 
     var body: some WidgetConfiguration {
@@ -379,7 +379,7 @@ struct KMBWidgetEntryView: View {
 @main
 struct KMBWidgetBundle: WidgetBundle {
     var body: some Widget {
-        KMBWidgetExtension()
+        KMBEtaWidget()
     }
 }
 
