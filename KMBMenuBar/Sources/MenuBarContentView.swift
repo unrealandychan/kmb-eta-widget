@@ -212,7 +212,7 @@ struct ETAMacRow: View {
                 .foregroundStyle(.white)
                 .padding(.horizontal, 7)
                 .padding(.vertical, 2)
-                .background(RoundedRectangle(cornerRadius: 5).fill(Color("#1C4CBF")))
+                .background(RoundedRectangle(cornerRadius: 5).fill(Color(hex: "#1C4CBF")))
                 .frame(width: 52, alignment: .leading)
                 .padding(.leading, 14)
 
@@ -325,5 +325,19 @@ struct MacStopSearchView: View {
         isLoading = true
         results = (try? await KMBAPIClient.searchStops(keyword: query)) ?? []
         isLoading = false
+    }
+}
+
+// MARK: - Color Hex Extension
+
+extension Color {
+    init(hex: String) {
+        let h = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        var int: UInt64 = 0
+        Scanner(string: h).scanHexInt64(&int)
+        let r = Double((int >> 16) & 0xFF) / 255
+        let g = Double((int >> 8)  & 0xFF) / 255
+        let b = Double(int         & 0xFF) / 255
+        self.init(red: r, green: g, blue: b)
     }
 }

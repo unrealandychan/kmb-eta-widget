@@ -65,8 +65,8 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.eddie.kmbwidget.widget
         INFOPLIST_FILE: KMBWidgetExtension/Info.plist
-        ENABLE_APP_SANDBOX: NO
-        OTHER_SWIFT_FLAGS: "-DWIDGET_EXTENSION"
+        # macOS requires all app extensions to be sandboxed
+        ENABLE_APP_SANDBOX: YES
     entitlements:
       path: KMBWidgetExtension/KMBWidgetExtension.entitlements
 
